@@ -17,11 +17,15 @@ export function middleware(request: NextRequest) {
   }
 
   const [, encoded] = auth.split(" ");
-
-  const decoded = Buffer.from(
-    encoded,
-    "base64"
-  ).toString();
+  if (!encoded) {
+  return new NextResponse("Authentication required", {
+    status: 401,
+    headers: {
+      "WWW-Authenticate": 'Basic realm="RTT Admin"',
+    },
+  });
+}
+  const decoded = atob(encoded);
 
   const [username, password] =
     decoded.split(":");
