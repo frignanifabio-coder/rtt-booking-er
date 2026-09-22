@@ -48,13 +48,7 @@ const selectedSlots = useMemo(() => {
 }, [selectedDay, monthSlots]);
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "2fr 1fr",
-        gap: 24,
-      }}
-    >
+      <div className="calendar-layout">
       {/* CALENDARIO */}
 
       <div
