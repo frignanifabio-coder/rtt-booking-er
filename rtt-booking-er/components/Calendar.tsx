@@ -19,6 +19,8 @@ interface CalendarProps {
 
 export default function Calendar({ slots }: CalendarProps) {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [currentMonth, setCurrentMonth] =
+  useState(new Date());
 
   const selectedSlots = useMemo(() => {
     if (!selectedDay) return [];
@@ -30,7 +32,20 @@ export default function Calendar({ slots }: CalendarProps) {
     );
   }, [selectedDay, slots]);
 
+  const daysInMonth = new Date(
+  currentMonth.getFullYear(),
+  currentMonth.getMonth() + 1,
+  0
+).getDate();
+
+const monthSlots = slots.filter((slot) => {
+  const d = new Date(slot.date);
+
   return (
+    d.getMonth() === currentMonth.getMonth() &&
+    d.getFullYear() === currentMonth.getFullYear()
+  );
+});
     <div
       style={{
         display: "grid",
@@ -48,14 +63,54 @@ export default function Calendar({ slots }: CalendarProps) {
           boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
         }}
       >
-        <h2
-          style={{
-            color: "#2563eb",
-            marginBottom: 20,
-          }}
-        >
-          Settembre 2026
-        </h2>
+        <div
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  }}
+>
+  <button
+    onClick={() =>
+      setCurrentMonth(
+        new Date(
+          currentMonth.getFullYear(),
+          currentMonth.getMonth() - 1,
+          1
+        )
+      )
+    }
+  >
+    ◀
+  </button>
+
+  <h2
+    style={{
+      color: "#2563eb",
+      margin: 0,
+    }}
+  >
+    {currentMonth.toLocaleDateString("it-IT", {
+      month: "long",
+      year: "numeric",
+    })}
+  </h2>
+
+  <button
+    onClick={() =>
+      setCurrentMonth(
+        new Date(
+          currentMonth.getFullYear(),
+          currentMonth.getMonth() + 1,
+          1
+        )
+      )
+    }
+  >
+    ▶
+  </button>
+</div>
 
         <div
           style={{
@@ -64,10 +119,10 @@ export default function Calendar({ slots }: CalendarProps) {
             gap: 8,
           }}
         >
-          {Array.from({ length: 30 }).map((_, index) => {
+          {Array.from({ length: daysInMonth }).map((_, index) => {
             const day = index + 1;
 
-            const daySlots = slots.filter(
+            const daySlots = monthSlots.filter(
               (s) =>
                 s.date.endsWith(
                   `-${String(day).padStart(2, "0")}`
