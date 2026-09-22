@@ -22,17 +22,7 @@ export default function Calendar({ slots }: CalendarProps) {
   const [currentMonth, setCurrentMonth] =
   useState(new Date());
 
-  const selectedSlots = useMemo(() => {
-    if (!selectedDay) return [];
-
-    return slots.filter((slot) =>
-      slot.date.endsWith(
-        `-${String(selectedDay).padStart(2, "0")}`
-      )
-    );
-  }, [selectedDay, slots]);
-
-  const daysInMonth = new Date(
+const daysInMonth = new Date(
   currentMonth.getFullYear(),
   currentMonth.getMonth() + 1,
   0
@@ -46,6 +36,18 @@ const monthSlots = slots.filter((slot) => {
     d.getFullYear() === currentMonth.getFullYear()
   );
 });
+
+const selectedSlots = useMemo(() => {
+  if (!selectedDay) return [];
+
+  return monthSlots.filter((slot) =>
+    slot.date.endsWith(
+      `-${String(selectedDay).padStart(2, "0")}`
+    )
+  );
+}, [selectedDay, monthSlots]);
+
+  return (
     <div
       style={{
         display: "grid",
