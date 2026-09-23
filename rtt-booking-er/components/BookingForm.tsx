@@ -84,7 +84,11 @@ if (error) {
     );
 
     e.currentTarget.reset();
-  }
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+}
 
   setLoading(false);
 }}

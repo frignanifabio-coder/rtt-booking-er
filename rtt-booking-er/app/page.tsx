@@ -1,5 +1,8 @@
+export const dynamic = "force-dynamic";
+
 import { supabase } from "@/lib/supabase";
 import Calendar from "@/components/Calendar";
+
 
 export default async function Home() {
   const { data: slots } = await supabase.rpc(
