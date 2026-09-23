@@ -72,11 +72,13 @@ export default function BookingForm({
       }
     );
 
-  if (error) {
-    setMessage(
-      "Errore durante la prenotazione"
-    );
-  } else {
+if (error) {
+  console.error("BOOK ERROR", error);
+
+  setMessage(
+    `Errore: ${error.message}`
+  );
+} else {
     setMessage(
       "✅ Richiesta inviata correttamente"
     );
