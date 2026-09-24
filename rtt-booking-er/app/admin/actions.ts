@@ -60,9 +60,7 @@ export async function cancelBooking(
   const { error } =
     await supabaseAdmin
       .from("bookings")
-      .update({
-        status: "cancelled",
-      })
+      .delete()
       .eq("id", bookingId);
 
   if (error) {
@@ -70,5 +68,6 @@ export async function cancelBooking(
   }
 
   revalidatePath("/admin");
+
   redirect("/admin");
 }

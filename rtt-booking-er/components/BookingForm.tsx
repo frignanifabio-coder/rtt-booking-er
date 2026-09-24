@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { supabaseClient } from "@/lib/supabase-client";
+import { submitBooking } from "@/app/book/actions";
 
 interface BookingFormProps {
   slotId: string;
@@ -24,70 +25,58 @@ export default function BookingForm({
     e.currentTarget
   );
 
-  const { error } =
-    await supabaseClient.rpc(
-      "book_rtt_slot",
-      {
-        p_availability_id: slotId,
+try {
 
-        p_societa:
-          formData.get("societa"),
+  await submitBooking({
+    p_availability_id: slotId,
 
-        p_codice_fip:
-          formData.get("codice_fip"),
+    p_societa:
+      formData.get("societa"),
 
-        p_referente:
-          formData.get("referente"),
+    p_codice_fip:
+      formData.get("codice_fip"),
 
-        p_telefono:
-          formData.get("telefono"),
+    p_referente:
+      formData.get("referente"),
 
-        p_email:
-          formData.get("email"),
+    p_telefono:
+      formData.get("telefono"),
 
-        p_comune:
-          formData.get("comune"),
+    p_email:
+      formData.get("email"),
 
-        p_palestra:
-          formData.get("palestra"),
+    p_comune:
+      formData.get("comune"),
 
-        p_categoria:
-          formData.get("categoria"),
+    p_palestra:
+      formData.get("palestra"),
 
-        p_annata:
-          formData.get("annata"),
+    p_categoria:
+      formData.get("categoria"),
 
-        p_tipo_intervento:
-          formData.get(
-            "tipo_intervento"
-          ),
+    p_annata:
+      formData.get("annata"),
 
-        p_focus_tecnico:
-          formData.get(
-            "focus_tecnico"
-          ),
+    p_tipo_intervento:
+      formData.get("tipo_intervento"),
 
-        p_note:
-          formData.get("note"),
-      }
-    );
+    p_focus_tecnico:
+      formData.get("focus_tecnico"),
 
-if (error) {
-  console.error("BOOK ERROR", error);
+    p_note:
+      formData.get("note"),
+  });
+
+  setMessage(
+    "✅ Richiesta inviata correttamente"
+  );
+
+} catch (error: any) {
 
   setMessage(
     `Errore: ${error.message}`
   );
-} else {
-    setMessage(
-      "✅ Richiesta inviata correttamente"
-    );
 
-    e.currentTarget.reset();
-
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
 }
 
   setLoading(false);
