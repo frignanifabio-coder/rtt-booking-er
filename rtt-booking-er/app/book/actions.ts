@@ -15,11 +15,12 @@ export async function submitBooking(data: any) {
     throw new Error(error.message);
   }
 
+  try {
+  console.log("Invio mail admin...");
   await resend.emails.send({
     from: "onboarding@resend.dev",
 
     to: [
-      "fabio.frignani@fipcrer.it",
       "frignanifabio@gmail.com",
     ],
 
@@ -35,10 +36,11 @@ export async function submitBooking(data: any) {
     `,
   });
 
+  console.log("Invio mail utente...");
   await resend.emails.send({
     from: "onboarding@resend.dev",
 
-    to: data.p_email,
+    to: "frignanifabio@gmail.com",
 
     subject: "Richiesta RTT ricevuta",
 
@@ -58,6 +60,14 @@ export async function submitBooking(data: any) {
       </p>
     `,
   });
+} catch (mailError) {
+
+  console.error(
+    "EMAIL ERROR:",
+    JSON.stringify(mailError, null, 2)
+  );
+
+}
 
   return true;
 }

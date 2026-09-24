@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { supabaseClient } from "@/lib/supabase-client";
 import { submitBooking } from "@/app/book/actions";
 
 interface BookingFormProps {
@@ -15,15 +14,15 @@ export default function BookingForm({
     const [message, setMessage] = useState("");
   return (
     <form
-    onSubmit={async (e) => {
+onSubmit={async (e) => {
   e.preventDefault();
+
+  const form = e.currentTarget;
 
   setLoading(true);
   setMessage("");
 
-  const formData = new FormData(
-    e.currentTarget
-  );
+  const formData = new FormData(form);
 
 try {
 
@@ -70,6 +69,11 @@ try {
   setMessage(
     "✅ Richiesta inviata correttamente"
   );
+form.reset();
+
+setTimeout(() => {
+  window.location.reload();
+}, 1000);
 
 } catch (error: any) {
 
