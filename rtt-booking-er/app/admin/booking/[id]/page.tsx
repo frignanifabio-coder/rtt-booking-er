@@ -251,26 +251,6 @@ export default async function AdminPage() {
     }}
   >
     🔴 Prenotato da {booked.societa}
-
-    <div
-      style={{
-        display: "flex",
-        gap: 8,
-        marginTop: 8,
-      }}
-    >
-      <Link href={`/admin/booking/${booked.id}`}>
-        <button>
-          👁️ Dettaglio
-        </button>
-      </Link>
-
-      <Link href={`/admin/booking/${booked.id}/edit`}>
-        <button>
-          ✏️ Modifica
-        </button>
-      </Link>
-    </div>
   </div>
 ) : (
   <>
