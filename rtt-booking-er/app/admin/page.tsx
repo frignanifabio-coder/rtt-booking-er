@@ -210,10 +210,11 @@ export default async function AdminPage() {
   {slots?.map((slot) => {
 
     const booked =
-      bookings?.find(
-        (b) =>
-          b.availability_id === slot.id
-      );
+  bookings?.find(
+    (b) =>
+      b.availability_id === slot.id &&
+      b.status !== "cancelled"
+  );
 
     return (
       <div
