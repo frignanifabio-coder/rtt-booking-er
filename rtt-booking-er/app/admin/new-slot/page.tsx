@@ -12,6 +12,18 @@ export default function NewSlotPage() {
         padding: 20,
       }}
     >
+    <Link
+      href="/admin"
+        style={{
+        display: "inline-block",
+        marginBottom: 20,
+        color: "#2563eb",
+        textDecoration: "none",
+        fontWeight: 600,
+        }}
+      >
+      ← Dashboard Admin
+    </Link>
       <h1
         style={{
           color: "#2563eb",
@@ -25,19 +37,3 @@ export default function NewSlotPage() {
     </div>
   );
 }
-
-<Link href="/admin">
-  <button
-    style={{
-      marginBottom: 20,
-      padding: "10px 16px",
-      borderRadius: 8,
-      border: "none",
-      background: "#2563eb",
-      color: "white",
-      cursor: "pointer",
-    }}
-  >
-    ← Torna alla Dashboard Admin
-  </button>
-</Link>
