@@ -38,7 +38,7 @@ export default function Calendar({ slots }: CalendarProps) {
           marginTop: 20,
         }}
       >
-        <div>🔵 Disponibile</div>
+        <div>🟢 Disponibile</div>
         <div>🔴 Occupato</div>
       </div>
     </div>

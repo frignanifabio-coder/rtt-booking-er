@@ -51,11 +51,13 @@ const selectedSlots = useMemo(() => {
       <div className="calendar-layout">
       {/* CALENDARIO */}
 
-      <div
-        style={{
-          background: "white",
-          borderRadius: 16,
-          padding: 24,
+<div
+  style={{
+    background: "white",
+    borderRadius: 16,
+    padding: "16px",
+    width: "100%",
+    boxSizing: "border-box",
           boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
         }}
       >
@@ -108,13 +110,14 @@ const selectedSlots = useMemo(() => {
   </button>
 </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(7,1fr)",
-            gap: 8,
-          }}
-        >
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns:
+      "repeat(auto-fit, minmax(42px, 1fr))",
+    gap: 6,
+  }}
+>
           {Array.from({ length: daysInMonth }).map((_, index) => {
             const day = index + 1;
 
@@ -144,8 +147,8 @@ const selectedSlots = useMemo(() => {
                     ? "2px solid #2563eb"
                     : "1px solid #dbeafe",
                   borderRadius: 12,
-                  padding: 12,
-                  minHeight: 70,
+                  padding: 6,
+                  minHeight: 55,
                   background: selected
                     ? "#eff6ff"
                     : "#fff",
@@ -188,18 +191,20 @@ const selectedSlots = useMemo(() => {
             gap: 20,
           }}
         >
-          <div>🔵 Disponibile</div>
+          <div>🟢 Disponibile</div>
           <div>🔴 Occupato</div>
         </div>
       </div>
 
       {/* DETTAGLIO */}
 
-      <div
-        style={{
-          background: "white",
-          borderRadius: 16,
-          padding: 24,
+<div
+  style={{
+    background: "white",
+    borderRadius: 16,
+    padding: "16px",
+    width: "100%",
+    boxSizing: "border-box",
           boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
         }}
       >
@@ -256,7 +261,7 @@ const selectedSlots = useMemo(() => {
                 >
                   {slot.booked
                     ? "🔴 Occupato"
-                    : "🔵 Disponibile"}
+                    : "🟢 Disponibile"}
                 </div>
                   {!slot.booked && (
                     <BookingForm
