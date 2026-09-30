@@ -17,203 +17,209 @@ interface CalendarProps {
   slots: Slot[];
 }
 
-export default function Calendar({ slots }: CalendarProps) {
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+const weekDays = [
+  "Lun",
+  "Mar",
+  "Mer",
+  "Gio",
+  "Ven",
+  "Sab",
+  "Dom",
+];
+
+export default function Calendar({
+  slots,
+}: CalendarProps) {
+  const [selectedDay, setSelectedDay] =
+    useState<number | null>(null);
+
   const [currentMonth, setCurrentMonth] =
-  useState(new Date());
+    useState(new Date());
 
-const daysInMonth = new Date(
-  currentMonth.getFullYear(),
-  currentMonth.getMonth() + 1,
-  0
-).getDate();
+  const year = currentMonth.getFullYear();
+  const month = currentMonth.getMonth();
 
-const monthSlots = slots.filter((slot) => {
-  const d = new Date(slot.date);
+  const daysInMonth = new Date(
+    year,
+    month + 1,
+    0
+  ).getDate();
+
+  const firstDay =
+    (new Date(year, month, 1).getDay() + 6) % 7;
+
+  const monthSlots = slots.filter((slot) => {
+    const d = new Date(slot.date);
+
+    return (
+      d.getMonth() === month &&
+      d.getFullYear() === year
+    );
+  });
+
+  const selectedSlots = useMemo(() => {
+    if (!selectedDay) return [];
+
+    return monthSlots.filter((slot) =>
+      slot.date.endsWith(
+        `-${String(selectedDay).padStart(
+          2,
+          "0"
+        )}`
+      )
+    );
+  }, [selectedDay, monthSlots]);
+
+  const cells = [];
+
+  for (let i = 0; i < firstDay; i++) {
+    cells.push(null);
+  }
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    cells.push(day);
+  }
 
   return (
-    d.getMonth() === currentMonth.getMonth() &&
-    d.getFullYear() === currentMonth.getFullYear()
-  );
-});
-
-const selectedSlots = useMemo(() => {
-  if (!selectedDay) return [];
-
-  return monthSlots.filter((slot) =>
-    slot.date.endsWith(
-      `-${String(selectedDay).padStart(2, "0")}`
-    )
-  );
-}, [selectedDay, monthSlots]);
-
-  return (
-      <div className="calendar-layout">
+    <div className="calendar-layout">
       {/* CALENDARIO */}
 
-<div
-  style={{
-    background: "white",
-    borderRadius: 16,
-    padding: "16px",
-    width: "100%",
-    boxSizing: "border-box",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-        }}
-      >
-        <div
-  style={{
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20,
-  }}
->
-  <button
-    onClick={() =>
-      setCurrentMonth(
-        new Date(
-          currentMonth.getFullYear(),
-          currentMonth.getMonth() - 1,
-          1
-        )
-      )
-    }
-  >
-    ◀
-  </button>
-
-  <h2
-    style={{
-      color: "#2563eb",
-      margin: 0,
-    }}
-  >
-    {currentMonth.toLocaleDateString("it-IT", {
-      month: "long",
-      year: "numeric",
-    })}
-  </h2>
-
-  <button
-    onClick={() =>
-      setCurrentMonth(
-        new Date(
-          currentMonth.getFullYear(),
-          currentMonth.getMonth() + 1,
-          1
-        )
-      )
-    }
-  >
-    ▶
-  </button>
-</div>
-
-<div
-  style={{
-    display: "grid",
-    gridTemplateColumns:
-      "repeat(auto-fit, minmax(42px, 1fr))",
-    gap: 6,
-  }}
->
-          {Array.from({ length: daysInMonth }).map((_, index) => {
-            const day = index + 1;
-
-            const daySlots = monthSlots.filter(
-              (s) =>
-                s.date.endsWith(
-                  `-${String(day).padStart(2, "0")}`
+      <div className="calendar-card">
+        <div className="calendar-header">
+          <button
+            className="month-btn"
+            onClick={() =>
+              setCurrentMonth(
+                new Date(
+                  year,
+                  month - 1,
+                  1
                 )
-            );
+              )
+            }
+          >
+            ◀
+          </button>
 
-            const hasSlot = daySlots.length > 0;
+          <h2 className="calendar-title">
+            {currentMonth.toLocaleDateString(
+              "it-IT",
+              {
+                month: "long",
+                year: "numeric",
+              }
+            )}
+          </h2>
+
+          <button
+            className="month-btn"
+            onClick={() =>
+              setCurrentMonth(
+                new Date(
+                  year,
+                  month + 1,
+                  1
+                )
+              )
+            }
+          >
+            ▶
+          </button>
+        </div>
+
+        <div className="week-header">
+          {weekDays.map((d) => (
+            <div
+              key={d}
+              className="weekday"
+            >
+              {d}
+            </div>
+          ))}
+        </div>
+
+        <div className="calendar-grid">
+          {cells.map((day, index) => {
+if (!day) {
+  return (
+    <div
+      key={`empty-${year}-${month}-${index}`}
+      className="empty-day"
+    />
+  );
+}
+
+            const daySlots =
+              monthSlots.filter((s) =>
+                s.date.endsWith(
+                  `-${String(day).padStart(
+                    2,
+                    "0"
+                  )}`
+                )
+              );
+
+            const hasSlot =
+              daySlots.length > 0;
 
             const allBooked =
               hasSlot &&
-              daySlots.every((s) => s.booked);
+              daySlots.every(
+                (s) => s.booked
+              );
 
             const selected =
               selectedDay === day;
 
             return (
               <div
-                key={day}
-                onClick={() => setSelectedDay(day)}
-                style={{
-                  cursor: "pointer",
-                  border: selected
-                    ? "2px solid #2563eb"
-                    : "1px solid #dbeafe",
-                  borderRadius: 12,
-                  padding: 6,
-                  minHeight: 55,
-                  background: selected
-                    ? "#eff6ff"
-                    : "#fff",
-                }}
+                key={`${year}-${month}-${day}`}
+                onClick={() =>
+                  setSelectedDay(day)
+                }
+                className={`day-cell ${
+                  selected
+                    ? "selected"
+                    : ""
+                }`}
               >
-                <div>{day}</div>
+                <span>{day}</span>
 
                 {hasSlot && !allBooked && (
-                  <div
-                    style={{
-                      marginTop: 8,
-                      width: 12,
-                      height: 12,
-                      borderRadius: "50%",
-                      background: "#2563eb",
-                    }}
-                  />
+                  <div className="dot available" />
                 )}
 
                 {allBooked && (
-                  <div
-                    style={{
-                      marginTop: 8,
-                      width: 12,
-                      height: 12,
-                      borderRadius: "50%",
-                      background: "#ef4444",
-                    }}
-                  />
+                  <div className="dot booked" />
                 )}
               </div>
             );
           })}
         </div>
 
-        <div
-          style={{
-            marginTop: 20,
-            display: "flex",
-            gap: 20,
-          }}
-        >
-          <div>🟢 Disponibile</div>
-          <div>🔴 Occupato</div>
+        <div className="legend">
+          <div>
+            <span className="dot available" />
+            Disponibile
+          </div>
+
+          <div>
+            <span className="dot booked" />
+            Occupato
+          </div>
         </div>
       </div>
 
       {/* DETTAGLIO */}
 
-<div
-  style={{
-    background: "white",
-    borderRadius: 16,
-    padding: "16px",
-    width: "100%",
-    boxSizing: "border-box",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-        }}
-      >
+      <div className="calendar-card">
         {!selectedDay && (
           <>
             <h3>Dettaglio slot</h3>
 
             <p>
-              Seleziona un giorno dal calendario.
+              Seleziona un giorno dal
+              calendario.
             </p>
           </>
         )}
@@ -224,52 +230,59 @@ const selectedSlots = useMemo(() => {
               Giorno {selectedDay}
             </h3>
 
-            {selectedSlots.length === 0 && (
-              <p>Nessuno slot disponibile.</p>
+            {selectedSlots.length ===
+              0 && (
+              <p>
+                Nessuno slot disponibile.
+              </p>
             )}
 
-            {selectedSlots.map((slot) => (
-              <div
-                key={slot.id}
-                style={{
-                  border: "1px solid #dbeafe",
-                  borderRadius: 12,
-                  padding: 16,
-                  marginTop: 12,
-                }}
-              >
-                <div>
-                  📍 {slot.location || "Da definire"}
-                </div>
-
-                <div>
-                  🕒 {slot.start_time} - {slot.end_time}
-                </div>
-
-                <div>
-                  📝 {slot.note}
-                </div>
-
+            {selectedSlots.map(
+              (slot) => (
                 <div
-                  style={{
-                    marginTop: 12,
-                    fontWeight: "bold",
-                    color: slot.booked
-                      ? "#ef4444"
-                      : "#2563eb",
-                  }}
+                  key={slot.id}
+                  className="slot-card"
                 >
-                  {slot.booked
-                    ? "🔴 Occupato"
-                    : "🟢 Disponibile"}
-                </div>
+                  <div>
+                    📍{" "}
+                    {slot.location ||
+                      "Da definire"}
+                  </div>
+
+                  <div>
+                    🕒{" "}
+                    {slot.start_time} -{" "}
+                    {slot.end_time}
+                  </div>
+
+                  {slot.note && (
+                    <div>
+                      📝 {slot.note}
+                    </div>
+                  )}
+
+                  <div
+                    style={{
+                      marginTop: 12,
+                      fontWeight: 700,
+                      color: slot.booked
+                        ? "#dc2626"
+                        : "#2563eb",
+                    }}
+                  >
+                    {slot.booked
+                      ? "🔴 Occupato"
+                      : "🟢 Disponibile"}
+                  </div>
+
                   {!slot.booked && (
                     <BookingForm
                       slotId={slot.id}
                     />
                   )}
-              </div>
-            ))}
+                </div>
+              )
+            )}
           </>
         )}
       </div>
