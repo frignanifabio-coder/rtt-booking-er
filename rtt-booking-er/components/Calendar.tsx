@@ -178,9 +178,13 @@ if (!day) {
                   setSelectedDay(day)
                 }
                 className={`day-cell ${
-                  selected
-                    ? "selected"
-                    : ""
+                selected
+                ? "selected"
+                : allBooked
+                ? "occupied"
+                : hasSlot
+                ? "available-day"
+                : ""
                 }`}
               >
                 <span>{day}</span>
@@ -212,7 +216,7 @@ if (!day) {
 
       {/* DETTAGLIO */}
 
-      <div className="calendar-card">
+      <div className="calendar-card detail-panel">
         {!selectedDay && (
           <>
             <h3>Dettaglio slot</h3>
@@ -226,9 +230,36 @@ if (!day) {
 
         {selectedDay && (
           <>
-            <h3>
-              Giorno {selectedDay}
-            </h3>
+            <div
+  style={{
+    marginBottom: 20,
+    paddingBottom: 14,
+    borderBottom: "1px solid #e2e8f0",
+  }}
+>
+  <div
+    style={{
+      fontSize: 13,
+      fontWeight: 700,
+      color: "#64748b",
+      textTransform: "uppercase",
+      letterSpacing: ".08em",
+    }}
+  >
+    R.O.A.D
+  </div>
+
+  <h2
+    style={{
+      margin: "8px 0 0 0",
+      color: "#0f4c81",
+      fontSize: 28,
+      fontWeight: 800,
+    }}
+  >
+    📅 {selectedDay}
+  </h2>
+</div>
 
             {selectedSlots.length ===
               0 && (
@@ -243,43 +274,122 @@ if (!day) {
                   key={slot.id}
                   className="slot-card"
                 >
-                  <div>
-                    📍{" "}
-                    {slot.location ||
-                      "Da definire"}
-                  </div>
-
-                  <div>
-                    🕒{" "}
-                    {slot.start_time} -{" "}
-                    {slot.end_time}
-                  </div>
-
-                  {slot.note && (
-                    <div>
-                      📝 {slot.note}
-                    </div>
-                  )}
-
                   <div
-                    style={{
-                      marginTop: 12,
-                      fontWeight: 700,
-                      color: slot.booked
-                        ? "#dc2626"
-                        : "#2563eb",
-                    }}
-                  >
-                    {slot.booked
-                      ? "🔴 Occupato"
-                      : "🟢 Disponibile"}
-                  </div>
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 10,
+    fontWeight: 600,
+  }}
+>
+  📍 {slot.location || "Da definire"}
+</div>
 
-                  {!slot.booked && (
-                    <BookingForm
-                      slotId={slot.id}
-                    />
-                  )}
+<div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 10,
+  }}
+>
+  🕒 {slot.start_time} - {slot.end_time}
+</div>
+
+{slot.note && (
+  <div
+    style={{
+      marginBottom: 10,
+    }}
+  >
+    📝 {slot.note}
+  </div>
+)}
+
+{slot.booked ? (
+  <div
+    style={{
+      marginTop: 20,
+      padding: 20,
+      borderRadius: 18,
+      background:
+        "linear-gradient(135deg,#fff1f2,#ffe4e6)",
+      border: "1px solid #fecdd3",
+    }}
+  >
+    <div
+      style={{
+        fontWeight: 800,
+        color: "#be123c",
+        fontSize: 18,
+        marginBottom: 8,
+      }}
+    >
+      🔒 Slot già prenotato
+    </div>
+
+    <div
+      style={{
+        color: "#881337",
+        fontSize: 14,
+      }}
+    >
+      Questo intervento RTT è già stato assegnato.
+    </div>
+
+    <div
+      style={{
+        marginTop: 12,
+        fontSize: 13,
+        color: "#9f1239",
+      }}
+    >
+      Seleziona un'altra data disponibile nel calendario.
+    </div>
+  </div>
+) : (
+  <>
+    <div
+      style={{
+        marginTop: 16,
+        padding: 18,
+        borderRadius: 18,
+        background:
+          "linear-gradient(135deg,#eff6ff,#dbeafe)",
+        border: "1px solid #93c5fd",
+      }}
+    >
+      <div
+        style={{
+          fontWeight: 800,
+          color: "#0f4c81",
+          marginBottom: 10,
+          fontSize: 16,
+        }}
+      >
+        📅 Intervento selezionato
+      </div>
+
+      <div>
+        Data: {slot.date}
+      </div>
+
+      <div>
+        Orario: {slot.start_time} - {slot.end_time}
+      </div>
+
+      <div>
+        Luogo: {slot.location || "Da definire"}
+      </div>
+    </div>
+
+    <BookingForm
+      slotId={slot.id}
+    />
+  </>
+)}
+
                 </div>
               )
             )}

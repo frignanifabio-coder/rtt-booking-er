@@ -91,15 +91,38 @@ setTimeout(() => {
         paddingTop: 18,
       }}
     >
-      <h4
-        style={{
-          marginBottom: 12,
-          color: "#0f4c81",
-        }}
-      >
-        Richiesta intervento RTT
-      </h4>
+<h4
+  style={{
+    marginBottom: 6,
+    color: "#0f4c81",
+    fontSize: 22,
+  }}
+>
+  Richiesta intervento RTT
+</h4>
 
+<p
+  style={{
+    marginTop: 0,
+    marginBottom: 20,
+    color: "#64748b",
+    fontSize: 14,
+  }}
+>
+  Compila i dati della società per
+  confermare la prenotazione.
+</p>
+<div
+  style={{
+    marginTop: 12,
+    marginBottom: 10,
+    fontWeight: 700,
+    color: "#0f4c81",
+    fontSize: 14,
+  }}
+>
+  DATI SOCIETÀ
+</div>
       <input
         name="societa"
         placeholder="Società *"
@@ -146,7 +169,17 @@ setTimeout(() => {
         placeholder="Palestra / indirizzo"
         style={inputStyle}
       />
-
+<div
+  style={{
+    marginTop: 16,
+    marginBottom: 10,
+    fontWeight: 700,
+    color: "#0f4c81",
+    fontSize: 14,
+  }}
+>
+  INTERVENTO RICHIESTO
+</div>
       <select
         name="categoria"
         defaultValue=""
@@ -228,7 +261,17 @@ setTimeout(() => {
           Altro
         </option>
       </select>
-
+<div
+  style={{
+    marginTop: 16,
+    marginBottom: 10,
+    fontWeight: 700,
+    color: "#0f4c81",
+    fontSize: 14,
+  }}
+>
+  NOTE TECNICHE
+</div>
       <textarea
         name="focus_tecnico"
         placeholder="Focus tecnico richiesto"
