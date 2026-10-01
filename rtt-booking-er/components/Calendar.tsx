@@ -244,71 +244,73 @@ onClick={() => {
     border: "1px solid #bfdbfe",
   }}
 >
-  <div
-    style={{
-      fontSize: 13,
-      fontWeight: 800,
-      color: "#2563eb",
-      textTransform: "uppercase",
-      letterSpacing: ".08em",
-      marginBottom: 12,
-    }}
-  >
-    R.O.A.D.
-  </div>
-
-  <h2
-    style={{
-      margin: 0,
-      color: "#0f4c81",
-      fontSize: 24,
-      fontWeight: 800,
-    }}
-  >
-    📅 Giorno {selectedDay}
-  </h2>
-
-  <div
-    style={{
-      marginTop: 18,
-      display: "flex",
-      flexDirection: "column",
-      gap: 10,
-      fontSize: 14,
-    }}
-  >
-    <div>✅ 1. Data selezionata</div>
-
+{selectedSlots.length > 0 && (
+  <>
     <div
       style={{
+        fontSize: 13,
+        fontWeight: 800,
         color: "#2563eb",
-        fontWeight: 700,
+        textTransform: "uppercase",
+        letterSpacing: ".08em",
+        marginBottom: 12,
       }}
     >
-      ➜ 2. Compila la richiesta
+      R.O.A.D.
     </div>
+
+    <h2
+  style={{
+    margin: 0,
+    color: "#0f4c81",
+    fontSize: 24,
+    fontWeight: 800,
+  }}
+>
+  📅{" "}
+  {selectedSlots[0] &&
+    new Date(selectedSlots[0].date).toLocaleDateString(
+      "it-IT",
+      {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }
+    )}
+</h2>
 
     <div
       style={{
-        color: "#64748b",
+        marginTop: 18,
+        display: "flex",
+        flexDirection: "column",
+        gap: 10,
+        fontSize: 14,
       }}
     >
-      3. Conferma automatica
+      <div>✅ 1. Data selezionata</div>
+
+      <div
+        style={{
+          color: "#2563eb",
+          fontWeight: 700,
+        }}
+      >
+        ➜ 2. Compila la richiesta
+      </div>
+
+      <div
+        style={{
+          color: "#64748b",
+        }}
+      >
+        3. Conferma automatica
+      </div>
     </div>
-  </div>
+  </>
+)}
 
-  <h2
-    style={{
-      margin: "8px 0 0 0",
-      color: "#0f4c81",
-      fontSize: 28,
-      fontWeight: 800,
-    }}
-  >
-    📅 {selectedDay}
-  </h2>
 </div>
-
             {selectedSlots.length ===
               0 && (
               <p>
