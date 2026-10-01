@@ -8,6 +8,7 @@ export default async function Home() {
   const { data: slots } = await supabase.rpc(
     "get_public_availability"
   );
+  console.log(slots);
   const availableSlots =
   slots?.filter(
     (s: any) => !s.booked

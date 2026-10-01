@@ -174,9 +174,13 @@ if (!day) {
             return (
               <div
                 key={`${year}-${month}-${day}`}
-                onClick={() =>
-                  setSelectedDay(day)
-                }
+onClick={() => {
+  setSelectedDay(null);
+
+  setTimeout(() => {
+    setSelectedDay(day);
+  }, 50);
+}}
                 className={`day-cell ${
                 selected
                 ? "selected"
@@ -230,23 +234,67 @@ if (!day) {
 
         {selectedDay && (
           <>
-            <div
+<div
   style={{
-    marginBottom: 20,
-    paddingBottom: 14,
-    borderBottom: "1px solid #e2e8f0",
+    marginBottom: 24,
+    padding: 20,
+    borderRadius: 20,
+    background:
+      "linear-gradient(135deg,#eff6ff,#dbeafe)",
+    border: "1px solid #bfdbfe",
   }}
 >
   <div
     style={{
       fontSize: 13,
-      fontWeight: 700,
-      color: "#64748b",
+      fontWeight: 800,
+      color: "#2563eb",
       textTransform: "uppercase",
       letterSpacing: ".08em",
+      marginBottom: 12,
     }}
   >
-    R.O.A.D
+    R.O.A.D.
+  </div>
+
+  <h2
+    style={{
+      margin: 0,
+      color: "#0f4c81",
+      fontSize: 24,
+      fontWeight: 800,
+    }}
+  >
+    📅 Giorno {selectedDay}
+  </h2>
+
+  <div
+    style={{
+      marginTop: 18,
+      display: "flex",
+      flexDirection: "column",
+      gap: 10,
+      fontSize: 14,
+    }}
+  >
+    <div>✅ 1. Data selezionata</div>
+
+    <div
+      style={{
+        color: "#2563eb",
+        fontWeight: 700,
+      }}
+    >
+      ➜ 2. Compila la richiesta
+    </div>
+
+    <div
+      style={{
+        color: "#64748b",
+      }}
+    >
+      3. Conferma automatica
+    </div>
   </div>
 
   <h2
@@ -274,36 +322,36 @@ if (!day) {
                   key={slot.id}
                   className="slot-card"
                 >
-                  <div
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: 8,
-    marginBottom: 10,
-    fontWeight: 600,
-  }}
->
-  📍 {slot.location || "Da definire"}
-</div>
-
-<div
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: 8,
-    marginBottom: 10,
-  }}
->
-  🕒 {slot.start_time} - {slot.end_time}
-</div>
 
 {slot.note && (
   <div
     style={{
-      marginBottom: 10,
+      marginBottom: 16,
+      padding: 16,
+      borderRadius: 16,
+      background:
+        "linear-gradient(135deg,#fff7ed,#ffedd5)",
+      border: "1px solid #fdba74",
     }}
   >
-    📝 {slot.note}
+    <div
+      style={{
+        fontWeight: 700,
+        color: "#c2410c",
+        marginBottom: 6,
+      }}
+    >
+      ℹ️ Informazioni per la prenotazione
+    </div>
+
+    <div
+      style={{
+        color: "#7c2d12",
+        lineHeight: 1.5,
+      }}
+    >
+      {slot.note}
+    </div>
   </div>
 )}
 
@@ -368,19 +416,18 @@ if (!day) {
           fontSize: 16,
         }}
       >
-        📅 Intervento selezionato
+        🏀 Richiedi l'intervento RTT
       </div>
 
-      <div>
-        Data: {slot.date}
-      </div>
-
-      <div>
-        Orario: {slot.start_time} - {slot.end_time}
-      </div>
-
-      <div>
-        Luogo: {slot.location || "Da definire"}
+      <div
+        style={{
+          color: "#334155",
+          lineHeight: 1.6,
+        }}
+      >
+        Compila il modulo sottostante per
+        richiedere l'intervento tecnico
+        regionale.
       </div>
     </div>
 
