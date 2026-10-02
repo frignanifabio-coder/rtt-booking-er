@@ -143,12 +143,20 @@ setTimeout(() => {
         style={inputStyle}
       />
 
-      <input
-        name="telefono"
-        placeholder="Telefono *"
-        required
-        style={inputStyle}
-      />
+<input
+  name="telefono"
+  type="tel"
+  placeholder="Telefono *"
+  required
+  minLength={9}
+  maxLength={15}
+  pattern="[0-9]{9,15}"
+  title="Inserisci un numero di telefono valido"
+  onInput={(e) => {
+    e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
+  }}
+  style={inputStyle}
+/>
 
       <input
         name="email"
