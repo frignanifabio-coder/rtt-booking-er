@@ -12,6 +12,7 @@ export default function BookingForm({
 }: BookingFormProps) {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+    const [bookingCode, setBookingCode] = useState("");
   return (
     <form
 onSubmit={async (e) => {
@@ -26,7 +27,7 @@ onSubmit={async (e) => {
 
 try {
 
-  await submitBooking({
+  const result = await submitBooking({
     p_availability_id: slotId,
 
     p_societa:
@@ -66,14 +67,8 @@ try {
       formData.get("note"),
   });
 
-  setMessage(
-    "✅ Richiesta inviata correttamente"
-  );
+setBookingCode(result.bookingCode);
 form.reset();
-
-setTimeout(() => {
-  window.location.reload();
-}, 1000);
 
 } catch (error: any) {
 
@@ -344,16 +339,91 @@ setTimeout(() => {
           ? "Invio..."
           : "Invia richiesta"}
       </button>
-{message && (
+{bookingCode && (
   <div
     style={{
-      marginTop: 12,
-      marginBottom: 12,
-      color: "#2563eb",
-      fontWeight: 600,
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,.55)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 9999,
     }}
   >
-    {message}
+    <div
+      style={{
+        background: "white",
+        borderRadius: 20,
+        padding: 30,
+        maxWidth: 500,
+        width: "90%",
+        textAlign: "center",
+        boxShadow:
+          "0 20px 60px rgba(0,0,0,.25)",
+      }}
+    >
+      <div
+        style={{
+          fontSize: 32,
+          marginBottom: 12,
+        }}
+      >
+        ✅
+      </div>
+
+      <h2
+        style={{
+          color: "#0f4c81",
+          marginBottom: 20,
+        }}
+      >
+        Richiesta registrata
+      </h2>
+
+      <p>
+        Codice prenotazione
+      </p>
+
+      <div
+        style={{
+          fontSize: 28,
+          fontWeight: 800,
+          color: "#2563eb",
+          margin: "16px 0",
+        }}
+      >
+        {bookingCode}
+      </div>
+
+      <p
+        style={{
+          color: "#64748b",
+          marginBottom: 24,
+        }}
+      >
+        Conserva questo codice per
+        eventuali comunicazioni con il
+        Comitato Regionale.
+      </p>
+
+      <button
+        onClick={() =>
+          window.location.reload()
+        }
+        style={{
+          background: "#2563eb",
+          color: "white",
+          border: "none",
+          borderRadius: 12,
+          padding: "12px 24px",
+          fontWeight: 700,
+          cursor: "pointer",
+        }}
+      >
+        Ho preso nota
+      </button>
+    </div>
   </div>
 )}
       <div

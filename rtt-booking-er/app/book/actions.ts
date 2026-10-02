@@ -5,69 +5,135 @@ import { resend } from "@/lib/resend";
 
 export async function submitBooking(data: any) {
 
-  const { error } =
-    await supabaseAdmin.rpc(
-      "book_rtt_slot",
-      data
-    );
+const {
+  data: bookingId,
+  error,
+} = await supabaseAdmin.rpc(
+  "book_rtt_slot",
+  data
+);
 
   if (error) {
     throw new Error(error.message);
   }
+  const bookingCode =
+  `ROAD-${bookingId
+    .slice(0, 6)
+    .toUpperCase()}`;
 
   try {
-  console.log("Invio mail admin...");
+
   await resend.emails.send({
     from: "onboarding@resend.dev",
 
     to: [
-      "frignanifabio@gmail.com",
+      "fabio.frignani@fipcrer.it",
     ],
 
-    subject: "Nuova richiesta RTT",
+    subject: "🏀 Nuova richiesta ROAD-ER",
 
     html: `
-      <h2>Nuova richiesta RTT</h2>
+      <h2>Nuova richiesta ROAD-ER</h2>
+
+      <hr />
 
       <p><strong>Società:</strong> ${data.p_societa}</p>
+
+      <p><strong>Codice FIP:</strong> ${data.p_codice_fip}</p>
+
       <p><strong>Referente:</strong> ${data.p_referente}</p>
+
       <p><strong>Email:</strong> ${data.p_email}</p>
+
       <p><strong>Telefono:</strong> ${data.p_telefono}</p>
+
+      <p><strong>Slot:</strong> ${data.p_slot_id}</p>
+
+      <hr />
+
+      <p>
+        Prenotazione registrata correttamente.
+      </p>
     `,
   });
 
-  console.log("Invio mail utente...");
   await resend.emails.send({
     from: "onboarding@resend.dev",
 
-    to: "frignanifabio@gmail.com",
+    to: data.p_email,
 
-    subject: "Richiesta RTT ricevuta",
+    subject: "✅ Richiesta ROAD-ER ricevuta",
 
     html: `
-      <h2>Richiesta ricevuta</h2>
+      <div
+        style="
+          max-width:600px;
+          font-family:Arial,sans-serif;
+          margin:auto;
+        "
+      >
+        <h1 style="color:#0f4c81;">
+          ROAD-ER
+        </h1>
 
-      <p>
-        Gentile ${data.p_referente},
-      </p>
+        <p>
+          Gentile
+          <strong>${data.p_referente}</strong>,
+        </p>
 
-      <p>
-        La richiesta è stata registrata correttamente.
-      </p>
+        <p>
+          la richiesta è stata registrata
+          correttamente.
+        </p>
 
-      <p>
-        RTT Booking ER
-      </p>
+        <div
+          style="
+            background:#eff6ff;
+            padding:16px;
+            border-radius:12px;
+          "
+        >
+          <p>
+            <strong>Società:</strong>
+            ${data.p_societa}
+          </p>
+
+          <p>
+            <strong>Telefono:</strong>
+            ${data.p_telefono}
+          </p>
+
+          <p>
+            <strong>Email:</strong>
+            ${data.p_email}
+          </p>
+        </div>
+
+        <p style="margin-top:20px;">
+          Riceverai eventuali comunicazioni
+          dal Comitato Regionale.
+        </p>
+
+        <hr />
+
+        <p style="color:#64748b;">
+          ROAD-ER · FIP Emilia-Romagna
+        </p>
+      </div>
     `,
   });
+
 } catch (mailError) {
 
   console.error(
     "EMAIL ERROR:",
     JSON.stringify(mailError, null, 2)
   );
-
 }
 
-  return true;
+return {
+  bookingId,
+  bookingCode,
+};
+
 }
