@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 import { supabase } from "@/lib/supabase";
 import Calendar from "@/components/Calendar";
 import Image from "next/image";
+import InstallBanner from "@/components/InstallBanner";
 
 export default async function Home() {
   const { data: slots } = await supabase.rpc(
@@ -28,6 +29,7 @@ const bookedSlots =
         padding: "30px 20px",
       }}
     >
+      <InstallBanner />
       <div
         style={{
           maxWidth: 1400,

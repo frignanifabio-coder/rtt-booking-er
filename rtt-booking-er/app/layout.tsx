@@ -16,6 +16,12 @@ export const metadata: Metadata = {
   title: "ROAD-ER",
   description: "Richiesta interventi tecnici regionali",
   applicationName: "ROAD-ER",
+
+    appleWebApp: {
+    capable: true,
+    title: "ROAD-ER",
+    statusBarStyle: "default",
+  },
 };
 
 
