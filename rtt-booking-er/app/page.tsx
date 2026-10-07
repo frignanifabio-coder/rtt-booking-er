@@ -5,11 +5,13 @@ import Calendar from "@/components/Calendar";
 import Image from "next/image";
 import InstallBanner from "@/components/InstallBanner";
 import Link from "next/link";
+import { getUpcomingEvents } from "@/lib/google-calendar";
 
 export default async function Home() {
   const { data: slots } = await supabase.rpc(
     "get_public_availability"
   );
+  const events = await getUpcomingEvents();
   console.log(slots);
   const availableSlots =
   slots?.filter(
@@ -188,6 +190,59 @@ const bookedSlots =
       />
     </Link>
     </div>
+</div>
+
+<div
+  style={{
+    background: "white",
+    borderRadius: 24,
+    padding: 24,
+    marginBottom: 30,
+    boxShadow:
+      "0 8px 24px rgba(15,76,129,0.08)",
+  }}
+>
+  <h2
+    style={{
+      marginTop: 0,
+      color: "#0f4c81",
+    }}
+  >
+    📌 Eventi Regionali
+  </h2>
+
+  {events.length === 0 ? (
+    <p>Nessun evento programmato.</p>
+  ) : (
+    events.map((event) => (
+      <div
+        key={event.id}
+        style={{
+          padding: "12px 0",
+          borderBottom:
+            "1px solid #e5e7eb",
+        }}
+      >
+        <strong>
+          {event.summary}
+        </strong>
+
+        <br />
+
+        <span
+          style={{
+            color: "#64748b",
+          }}
+        >
+          {event.start?.dateTime
+            ? new Date(
+                event.start.dateTime
+              ).toLocaleDateString("it-IT")
+            : event.start?.date}
+        </span>
+      </div>
+    ))
+  )}
 </div>
 
         {/* CONTENUTO */}
