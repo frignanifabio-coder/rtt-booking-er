@@ -32,6 +32,16 @@ export default async function AdminPage() {
   console.log(
   JSON.stringify(bookings, null, 2)
 );
+
+const freeSlots =
+  slots?.filter(
+    (slot) =>
+      !bookings?.find(
+        (b) =>
+          b.availability_id === slot.id &&
+          b.status !== "cancelled"
+      )
+  ) || [];
   
   return (
     <div
@@ -54,23 +64,25 @@ export default async function AdminPage() {
     marginBottom: 20,
   }}
 >
-<Link href="/admin/new-slot">
-  <button
-    style={{
-      background: "#2563eb",
-      color: "white",
-      border: "none",
-      borderRadius: 12,
-      padding: "12px 20px",
-      fontWeight: 600,
-      cursor: "pointer",
-      minWidth: 140,
-      minHeight: 50,
-    }}
-  >
-    ➕ Nuovo Slot
-  </button>
-</Link>
+<div style={{ marginBottom: 30 }}>
+  <Link href="/admin/new-slot">
+    <button
+      style={{
+        background: "#383c46",
+        color: "white",
+        border: "none",
+        borderRadius: 14,
+        padding: "16px 26px",
+        fontWeight: 700,
+        cursor: "pointer",
+        boxShadow:
+          "0 6px 18px rgba(47, 50, 53, 0.41)",
+      }}
+    >
+      + Nuovo Slot
+    </button>
+  </Link>
+</div>
 
 <div
   style={{
@@ -80,32 +92,66 @@ export default async function AdminPage() {
     flexWrap: "wrap",
   }}
 >
-  <div style={cardStyle}>
-    Prenotazioni
-    <br />
-    <strong>{bookings?.length || 0}</strong>
+
+
+<div
+  style={{
+    ...cardStyle,
+    background: "#2563eb",
+    color: "white",
+  }}
+>
+
+
+  <div style={{ fontSize: 34, fontWeight: 800 }}>
+    {bookings?.length || 0}
   </div>
 
-  <div style={cardStyle}>
-    Slot totali
-    <br />
-    <strong>{slots?.length || 0}</strong>
+  <div>Prenotazioni</div>
+</div>
+
+<div
+  style={{
+    ...cardStyle,
+    background: "#7c3aed",
+    color: "white",
+  }}
+>
+  <div style={{ fontSize: 34, fontWeight: 800 }}>
+    {slots?.length || 0}
   </div>
 
-  <div style={cardStyle}>
-    Slot prenotati
-    <br />
-    <strong>{bookings?.length || 0}</strong>
+  <div>Slot Totali</div>
+</div>
+
+<div
+  style={{
+    ...cardStyle,
+    background: "#f59e0b",
+    color: "white",
+  }}
+>
+  <div style={{ fontSize: 34, fontWeight: 800 }}>
+    {bookings?.length || 0}
   </div>
 
-  <div style={cardStyle}>
-    Slot liberi
-    <br />
-    <strong>
-      {(slots?.length || 0) -
-        (bookings?.length || 0)}
-    </strong>
+  <div>Da Gestire</div>
+</div>
+
+<div
+  style={{
+    ...cardStyle,
+    background: "#16a34a",
+    color: "white",
+  }}
+>
+  <div style={{ fontSize: 34, fontWeight: 800 }}>
+    {(slots?.length || 0) -
+      (bookings?.length || 0)}
   </div>
+
+  <div>Slot Liberi</div>
+</div>
 </div>
 
 </div>
@@ -126,67 +172,161 @@ export default async function AdminPage() {
     marginTop: 20,
   }}
 >
-  <table
-    style={{
-      width: "100%",
-      borderCollapse: "collapse",
-    }}
-  >
-    <thead>
-      <tr
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns:
+      "repeat(auto-fill,minmax(320px,1fr))",
+    gap: 16,
+    marginTop: 20,
+  }}
+>
+  {bookings?.map((booking) => {
+
+    const bookingCode =
+      `ROAD-${booking.id
+        .slice(0, 6)
+        .toUpperCase()}`;
+
+    return (
+      <div
+        key={booking.id}
         style={{
-          background: "#eff6ff",
+          background: "#ffffff",
+          border: "1px solid #e5e7eb",
+          borderRadius: 18,
+          padding: 18,
+          boxShadow:
+            "0 4px 14px rgba(0,0,0,.06)",
         }}
       >
-        <th style={thStyle}>Data</th>
-        <th style={thStyle}>Società</th>
-        <th style={thStyle}>Categoria</th>
-        <th style={thStyle}>Referente</th>
-        <th style={thStyle}>Stato</th>
-      </tr>
-    </thead>
+        <div
+          style={{
+            fontSize: 12,
+            color: "#64748b",
+            marginBottom: 8,
+            fontWeight: 700,
+          }}
+        >
+          {bookingCode}
+        </div>
 
-    <tbody>
-      {bookings?.map((booking) => (
-        <tr key={booking.id}>
-          <td style={tdStyle}>
-  {booking.availability
-    ? booking.availability.date
-        .split("-")
-        .reverse()
-        .join("/")
-    : "-"}
-</td>
-          <td style={tdStyle}>
-            {booking.societa}
-          </td>
+        <div
+          style={{
+            fontSize: 20,
+            fontWeight: 800,
+            color: "#0f4c81",
+            marginBottom: 8,
+          }}
+        >
+          {booking.societa}
+        </div>
 
-          <td style={tdStyle}>
-            {booking.categoria}
-          </td>
+        <div
+          style={{
+            color: "#475569",
+            marginBottom: 4,
+          }}
+        >
+          👤 {booking.referente}
+        </div>
 
-          <td style={tdStyle}>
-            {booking.referente}
-          </td>
+        <div
+          style={{
+            color: "#475569",
+            marginBottom: 4,
+          }}
+        >
+          🏀 {booking.categoria || "-"}
+        </div>
 
-          <td style={tdStyle}>
-            <span
-              style={{
-              background: "#fef3c7",
-              color: "#92400e",
-              padding: "4px 8px",
-              borderRadius: 999,
-              fontSize: 12,
-              fontWeight: 600,
-              }}
-            >
-             {booking.status}
-            </span>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
+        <div
+          style={{
+            color: "#475569",
+            marginBottom: 12,
+          }}
+        >
+          📅 {booking.availability
+            ? booking.availability.date
+                .split("-")
+                .reverse()
+                .join("/")
+            : "-"}
+              <div
+  style={{
+    color: "#475569",
+    marginBottom: 4,
+  }}
+>
+  ⏰ {booking.availability?.start_time}
+  {" → "}
+  {booking.availability?.end_time}
+</div>
+
+<div
+  style={{
+    color: "#475569",
+    marginBottom: 12,
+  }}
+>
+  📍 {booking.availability?.location || "-"}
+</div>
+
+        </div>
+
+        <div
+          style={{
+            display: "inline-block",
+            background: "#fef3c7",
+            color: "#92400e",
+            padding: "6px 12px",
+            borderRadius: 999,
+            fontSize: 12,
+            fontWeight: 700,
+          }}
+        >
+          🟡 Richiesta ricevuta
+        </div>
+
+        <div
+          style={{
+            marginTop: 16,
+          }}
+        >
+<Link
+  href={`/admin/booking/${booking.id}`}
+  style={{
+    background: "#2563eb",
+    color: "white",
+    borderRadius: 10,
+    padding: "10px 14px",
+    textDecoration: "none",
+    fontWeight: 600,
+    display: "inline-block",
+  }}
+>
+  👁️ Dettaglio
+</Link>
+<Link
+  href={`/admin/booking/${booking.id}/edit`}
+  style={{
+    background: "#f59e0b",
+    color: "white",
+    borderRadius: 10,
+    padding: "10px 14px",
+    textDecoration: "none",
+    fontWeight: 600,
+    display: "inline-block",
+  }}
+>
+  ✏️ Modifica
+</Link>
+
+        </div>
+      </div>
+    );
+  })}
+</div>
 </div>
 
         <p>
@@ -205,9 +345,11 @@ export default async function AdminPage() {
       "0 2px 10px rgba(0,0,0,.08)",
   }}
 >
+
+
   <h2>Slot disponibili</h2>
 
-  {slots?.map((slot) => {
+  {freeSlots.map((slot) => {
 
     const booked =
   bookings?.find(
