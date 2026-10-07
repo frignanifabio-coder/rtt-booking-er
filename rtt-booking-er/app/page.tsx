@@ -165,10 +165,14 @@ const bookedSlots =
         </div>
       </div>
     </div>
+  
 
     {/* ADMIN */}
 
-    <Link href="/admin">
+    <Link
+  href="/admin"
+  prefetch={false}
+>
       <Image
         src="/admin-icon.png"
         alt="ROAD-ER Admin"
@@ -183,7 +187,7 @@ const bookedSlots =
         }}
       />
     </Link>
-  </div>
+    </div>
 </div>
 
         {/* CONTENUTO */}
