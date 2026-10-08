@@ -192,16 +192,7 @@ const bookedSlots =
     </div>
 </div>
 
-<div
-  style={{
-    background: "white",
-    borderRadius: 24,
-    padding: 24,
-    marginBottom: 30,
-    boxShadow:
-      "0 8px 24px rgba(15,76,129,0.08)",
-  }}
->
+ {/* 
   <h2
     style={{
       marginTop: 0,
@@ -242,12 +233,15 @@ const bookedSlots =
         </span>
       </div>
     ))
-  )}
+  )
 </div>
-
+*/}
         {/* CONTENUTO */}
 
-        <Calendar slots={slots || []} />
+        <Calendar
+  slots={slots || []}
+  events={events || []}
+/>
 
         {/* FOOTER */}
 

@@ -14,7 +14,8 @@ export async function getUpcomingEvents() {
       version: "v3",
       auth,
     });
-
+console.log("CALENDAR ID =", process.env.GOOGLE_CALENDAR_ID);
+console.log("CLIENT EMAIL =", process.env.GOOGLE_CLIENT_EMAIL);
     const response = await calendar.events.list({
       calendarId: process.env.GOOGLE_CALENDAR_ID,
       timeMin: new Date().toISOString(),
@@ -22,7 +23,10 @@ export async function getUpcomingEvents() {
       singleEvents: true,
       orderBy: "startTime",
     });
-
+console.log(
+  "EVENTI GOOGLE:",
+  response.data.items?.length
+);
     return response.data.items || [];
   } catch (error) {
     console.error("GOOGLE CALENDAR ERROR:", error);

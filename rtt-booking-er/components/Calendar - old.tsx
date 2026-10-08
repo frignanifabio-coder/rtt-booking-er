@@ -104,36 +104,11 @@ const monthEvents = events.filter((event) => {
   });
 }, [selectedDay, monthEvents]);
 
-const eventDate =
-  selectedEvents[0]?.start?.dateTime ||
-  selectedEvents[0]?.start?.date;
-
-const eventTime =
-  selectedEvents[0]?.start?.dateTime
-    ? new Date(
-        selectedEvents[0].start.dateTime
-      ).toLocaleTimeString("it-IT", {
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    : null;
-
-const formattedDate =
-  eventDate &&
-  new Date(eventDate).toLocaleDateString(
-    "it-IT",
-    {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }
-  );
-
-const eventLocation =
-  selectedEvents[0]?.location || "";
-
 const selectedEvent = selectedEvents[0];
 
+const eventDate =
+  selectedEvent?.start?.dateTime ||
+  selectedEvent?.start?.date;
   
   const cells = [];
 
@@ -147,8 +122,6 @@ const selectedEvent = selectedEvents[0];
 
   return (
     <div className="calendar-layout">
-
-
       {/* CALENDARIO */}
 
       <div className="calendar-card">
@@ -364,19 +337,19 @@ style={{
           </>
         )}
 
-{selectedDay && (
-  <>
+        {selectedDay && (
+          <>
+<div
+  style={{
+    marginBottom: 24,
+    padding: 20,
+    borderRadius: 20,
+    background:
+      "linear-gradient(135deg,#eff6ff,#dbeafe)",
+    border: "1px solid #bfdbfe",
+  }}
+>
 {selectedSlots.length > 0 && (
-  <div
-    style={{
-      marginBottom: 24,
-      padding: 20,
-      borderRadius: 20,
-      background:
-        "linear-gradient(135deg,#eff6ff,#dbeafe)",
-      border: "1px solid #bfdbfe",
-    }}
-  >
   <>
     <div
       style={{
@@ -440,10 +413,9 @@ style={{
       </div>
     </div>
   </>
-  </div>
 )}
 
-
+</div>
 {selectedSlots.length === 0 &&
  selectedEvents.length === 0 && (
   <p>
@@ -452,123 +424,104 @@ style={{
 )}
 
 {selectedEvents.length > 0 && (
+<div
+  style={{
+    marginBottom: 24,
+    padding: 20,
+    borderRadius: 20,
+    background:
+      "linear-gradient(135deg,#eff6ff,#dbeafe)",
+    border: "1px solid #bfdbfe",
+  }}
+>
   <div
     style={{
-      marginBottom: 24,
-      padding: 20,
-      borderRadius: 20,
-      background:
-        "linear-gradient(135deg,#eff6ff,#dbeafe)",
-      border: "1px solid #bfdbfe",
+      fontSize: 13,
+      fontWeight: 800,
+      color: "#2563eb",
+      textTransform: "uppercase",
+      letterSpacing: ".08em",
+      marginBottom: 12,
     }}
   >
-<div
-  style={{
-    fontSize: 13,
-    fontWeight: 800,
-    color: "#2563eb",
-    textTransform: "uppercase",
-    letterSpacing: ".08em",
-    marginBottom: 16,
-  }}
->
-  ATTIVITÀ REGIONALE FIP ER
-</div>
-
-<div
-  style={{
-    fontSize: 20,
-    fontWeight: 800,
-    color: "#1e3a8a",
-    lineHeight: 1.2,
-    marginBottom: 18,
-  }}
->
-  {selectedEvents[0]?.summary?.replaceAll("_", " ")}
-</div>
-
-<div
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: 20,
-    marginBottom: 18,
-    color: "#0f4c81",
-    fontWeight: 700,
-    fontSize: 18,
-  }}
->
-  <span>📅 {formattedDate}</span>
-
-  {eventTime && (
-    <span>🕒 {eventTime}</span>
-  )}
-</div>
-
-{eventLocation && (
-  <div
-    style={{
-      color: "#475569",
-      fontSize: 15,
-      marginBottom: 18,
-    }}
-  >
-    📍 {eventLocation}
+    EVENTO REGIONALE
   </div>
+
+  <h2
+    style={{
+      margin: 0,
+      color: "#0f4c81",
+      fontSize: 24,
+      fontWeight: 800,
+    }}
+  >
+    📅{" "}
+    {new Date(eventDate).toLocaleDateString(
+      "it-IT",
+      {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }
+    )}
+  </h2>
+</div>
 )}
 
-<div
-  style={{
-    display: "flex",
-    flexDirection: "column",
-    gap: 8,
-    fontSize: 15,
-  }}
->
-  <div>✅ Evento programmato</div>
-
+{selectedEvents.map((event, index) => (
   <div
+    key={index}
     style={{
-      color: "#2563eb",
-      fontWeight: 700,
+      marginBottom: 20,
+      padding: 18,
+      borderRadius: 18,
+      background:
+        "linear-gradient(135deg,#eef2ff,#dbeafe)",
+      border: "1px solid #93c5fd",
     }}
   >
-    🏀 Attività regionale
-  </div>
-      <div
-        style={{
-          color: "#64748b",
-        }}
-      >
-        FIP Emilia-Romagna
-      </div>
+    <div
+      style={{
+        fontWeight: 800,
+        fontSize: 18,
+        color: "#1e40af",
+        marginBottom: 10,
+      }}
+    >
+      🏀 Attività Regionale FIP ER
     </div>
 
     <div
       style={{
-        marginTop: 22,
-        fontSize: 22,
-        fontWeight: 800,
-        color: "#1e3a8a",
-        lineHeight: 1.2,
+        fontWeight: 700,
+        marginBottom: 8,
       }}
     >
-
+      <h2
+  style={{
+    margin: 0,
+    fontSize: 24,
+    fontWeight: 800,
+    color: "#1e3a8a",
+  }}
+>
+  {event.summary}
+</h2>
     </div>
 
-    {selectedEvents[0]?.description && (
+    {event.description && (
       <div
         style={{
-          marginTop: 12,
-          color: "#475569",
+          color: "#334155",
           lineHeight: 1.6,
+          whiteSpace: "pre-wrap",
         }}
       >
-        {selectedEvents[0].description}
+        {event.description}
       </div>
     )}
   </div>
-)}
+))}
 
             {selectedSlots.map(
               (slot) => (

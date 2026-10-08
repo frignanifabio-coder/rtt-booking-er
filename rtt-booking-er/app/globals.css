@@ -113,7 +113,8 @@ body {
 /* CELLE */
 
 .day-cell {
-  min-height: 95px;
+  height: 110px;
+  overflow: hidden;
   border-radius: 18px;
   padding: 10px;
   cursor: pointer;
