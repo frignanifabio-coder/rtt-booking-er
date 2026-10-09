@@ -143,7 +143,7 @@ form.reset();
   type="tel"
   placeholder="Telefono *"
   required
-  minLength={9}
+  minLength={10}
   maxLength={15}
   pattern="[0-9]{9,15}"
   title="Inserisci un numero di telefono valido"
