@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { supabase } from "@/lib/supabase";
 import Calendar from "@/components/Calendar";
+import EventMap from "@/components/EventMapLoader";
 import Image from "next/image";
 import InstallBanner from "@/components/InstallBanner";
 import Link from "next/link";
@@ -192,57 +193,12 @@ const bookedSlots =
     </div>
 </div>
 
- {/* 
-  <h2
-    style={{
-      marginTop: 0,
-      color: "#0f4c81",
-    }}
-  >
-    📌 Eventi Regionali
-  </h2>
-
-  {events.length === 0 ? (
-    <p>Nessun evento programmato.</p>
-  ) : (
-    events.map((event) => (
-      <div
-        key={event.id}
-        style={{
-          padding: "12px 0",
-          borderBottom:
-            "1px solid #e5e7eb",
-        }}
-      >
-        <strong>
-          {event.summary}
-        </strong>
-
-        <br />
-
-        <span
-          style={{
-            color: "#64748b",
-          }}
-        >
-          {event.start?.dateTime
-            ? new Date(
-                event.start.dateTime
-              ).toLocaleDateString("it-IT")
-            : event.start?.date}
-        </span>
-      </div>
-    ))
-  )
-</div>
-*/}
         {/* CONTENUTO */}
 
-        <Calendar
+<Calendar
   slots={slots || []}
   events={events || []}
 />
-
         {/* FOOTER */}
 
         <div

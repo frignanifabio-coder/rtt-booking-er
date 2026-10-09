@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import BookingForm from "@/components/BookingForm";
+import EventMap from "@/components/EventMapLoader";
 
 interface Slot {
   id: string;
@@ -351,17 +352,14 @@ style={{
       </div>
 
       {/* DETTAGLIO */}
-
       <div className="calendar-card detail-panel">
-        {!selectedDay && (
-          <>
-            <h3>Dettaglio slot</h3>
 
-            <p>
-              Seleziona un giorno dal
-              calendario.
-            </p>
-          </>
+
+      {/* MAPPA INIZIALE O GIORNO SENZA CONTENUTI */}
+        {(!selectedDay ||
+          (selectedSlots.length === 0 &&
+            selectedEvents.length === 0)) && (
+            <EventMap events={events || []} />
         )}
 
 {selectedDay && (
@@ -444,12 +442,12 @@ style={{
 )}
 
 
-{selectedSlots.length === 0 &&
+{/*selectedSlots.length === 0 &&
  selectedEvents.length === 0 && (
   <p>
     Nessuno slot disponibile.
   </p>
-)}
+)*/}
 
 {selectedEvents.length > 0 && (
   <div
@@ -472,7 +470,7 @@ style={{
     marginBottom: 16,
   }}
 >
-  ATTIVITÀ REGIONALE FIP ER
+  🏀 ATTIVITÀ REGIONALE FIP ER
 </div>
 
 <div
@@ -527,14 +525,6 @@ style={{
 >
   <div>✅ Evento programmato</div>
 
-  <div
-    style={{
-      color: "#2563eb",
-      fontWeight: 700,
-    }}
-  >
-    🏀 Attività regionale
-  </div>
       <div
         style={{
           color: "#64748b",
@@ -569,6 +559,13 @@ style={{
     )}
   </div>
 )}
+
+
+{/* MAPPA SOTTO IL DETTAGLIO EVENTO */}
+{selectedEvents.length > 0 && (
+  <EventMap events={selectedEvents} />
+)}
+
 
             {selectedSlots.map(
               (slot) => (
