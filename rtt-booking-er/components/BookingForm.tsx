@@ -20,6 +20,10 @@ onSubmit={async (e) => {
 
   const form = e.currentTarget;
 
+  if (!form.reportValidity()) {
+    return;
+  }
+
   setLoading(true);
   setMessage("");
 
@@ -321,24 +325,25 @@ form.reset();
         </span>
       </label>
 
-      <button
-        type="submit"
-        style={{
-          width: "100%",
-          background: "#2563eb",
-          color: "white",
-          border: "none",
-          borderRadius: 10,
-          padding: 13,
-          cursor: "pointer",
-          fontWeight: 700,
-          fontSize: 15,
-        }}
-      >
-        {loading
-          ? "Invio..."
-          : "Invia richiesta"}
-      </button>
+
+<button
+  type="submit"
+  disabled={loading}
+  style={{
+    width: "100%",
+    background: loading ? "#93c5fd" : "#2563eb",
+    color: "white",
+    border: "none",
+    borderRadius: 10,
+    padding: 13,
+    cursor: loading ? "wait" : "pointer",
+    fontWeight: 700,
+    fontSize: 15,
+  }}
+>
+  {loading ? "Invio..." : "Invia richiesta"}
+</button>
+
 {bookingCode && (
   <div
     style={{
@@ -408,6 +413,7 @@ form.reset();
       </p>
 
       <button
+      type="button"
         onClick={() =>
           window.location.reload()
         }

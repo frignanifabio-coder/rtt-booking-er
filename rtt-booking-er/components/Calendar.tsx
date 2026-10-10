@@ -29,6 +29,56 @@ const weekDays = [
   "Dom",
 ];
 
+
+function eventOccursOnDay(
+  event: any,
+  year: number,
+  month: number,
+  day: number
+) {
+  const startValue =
+    event.start?.dateTime || event.start?.date;
+
+  if (!startValue) return false;
+
+  const dayStart = new Date(year, month, day);
+  const nextDay = new Date(year, month, day + 1);
+
+  // Eventi che occupano giornate intere
+  if (event.start?.date) {
+    const start = event.start.date;
+    const end =
+      event.end?.date || start;
+
+    const target = [
+      year,
+      String(month + 1).padStart(2, "0"),
+      String(day).padStart(2, "0"),
+    ].join("-");
+
+    return start <= target && target < end;
+  }
+
+  // Eventi con orario
+  const start = new Date(startValue);
+  const endValue = event.end?.dateTime;
+
+  if (!endValue) {
+    return (
+      start >= dayStart &&
+      start < nextDay
+    );
+  }
+
+  const end = new Date(endValue);
+
+  return (
+    start < nextDay &&
+    end > dayStart
+  );
+}
+
+
 export default function Calendar({
   slots,
   events,
@@ -60,20 +110,17 @@ const monthSlots = slots.filter((slot) => {
   );
 });
 
+
 const monthEvents = events.filter((event) => {
-  const date =
-    event.start?.dateTime ||
-    event.start?.date;
+  for (let day = 1; day <= daysInMonth; day++) {
+    if (eventOccursOnDay(event, year, month, day)) {
+      return true;
+    }
+  }
 
-  if (!date) return false;
-
-  const d = new Date(date);
-
-  return (
-    d.getMonth() === month &&
-    d.getFullYear() === year
-  );
+  return false;
 });
+
 
   const selectedSlots = useMemo(() => {
     if (!selectedDay) return [];
@@ -88,22 +135,20 @@ const monthEvents = events.filter((event) => {
     );
   }, [selectedDay, monthSlots]);
 
-  const selectedEvents = useMemo(() => {
+
+const selectedEvents = useMemo(() => {
   if (!selectedDay) return [];
 
-  return monthEvents.filter((event) => {
-    const date =
-      event.start?.dateTime ||
-      event.start?.date;
-
-    if (!date) return false;
-
-    return (
-      new Date(date).getDate() ===
+  return monthEvents.filter((event) =>
+    eventOccursOnDay(
+      event,
+      year,
+      month,
       selectedDay
-    );
-  });
-}, [selectedDay, monthEvents]);
+    )
+  );
+}, [selectedDay, monthEvents, year, month]);
+
 
 const eventDate =
   selectedEvents[0]?.start?.dateTime ||
@@ -227,18 +272,16 @@ if (!day) {
                 )
               );
 
-const dayEvents =
-  monthEvents.filter((event) => {
-    const date =
-      event.start?.dateTime ||
-      event.start?.date;
 
-    if (!date) return false;
+const dayEvents = monthEvents.filter((event) =>
+  eventOccursOnDay(
+    event,
+    year,
+    month,
+    day
+  )
+);
 
-    return (
-      new Date(date).getDate() === day
-    );
-  });
 
             const hasSlot =
               daySlots.length > 0;
