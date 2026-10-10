@@ -461,6 +461,36 @@ style={{
         fontSize: 14,
       }}
     >
+
+
+{selectedSlots[0]?.start_time && (
+  <div
+    style={{
+      marginBottom: 14,
+      padding: "12px 14px",
+      borderRadius: 12,
+      background: "#dbeafe",
+      border: "1px solid #93c5fd",
+      color: "#1d4ed8",
+      fontSize: 18,
+      fontWeight: 800,
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+    }}
+  >
+    🕒{" "}
+    {selectedSlots[0].start_time.slice(0, 5)}
+    {selectedSlots[0].end_time && (
+      <>
+        {" – "}
+        {selectedSlots[0].end_time.slice(0, 5)}
+      </>
+    )}
+  </div>
+)}
+
+
       <div>✅ 1. Data selezionata</div>
 
       <div
