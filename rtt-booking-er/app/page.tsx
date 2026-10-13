@@ -100,7 +100,7 @@ const bookedSlots =
 
           <Link href="/admin" prefetch={false} className="footer-admin-link">
             <Image
-              src="/admin-icon.png"
+              src="/admin-icon-2.png"
               alt=""
               width={28}
               height={28}
