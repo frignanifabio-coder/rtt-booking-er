@@ -6,6 +6,7 @@ import Image from "next/image";
 import InstallBanner from "@/components/InstallBanner";
 import Link from "next/link";
 import { getUpcomingEvents } from "@/lib/google-calendar";
+import VisitTracker from "@/components/VisitTracker";
 
 export default async function Home() {
   const { data: slots } = await supabase.rpc(
@@ -32,6 +33,7 @@ const bookedSlots =
         padding: "30px 20px",
       }}
     >
+      <VisitTracker />
       <InstallBanner />
       <div
         style={{
