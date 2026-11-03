@@ -295,6 +295,13 @@ const dayEvents = monthEvents.filter((event) =>
             const selected =
               selectedDay === day;
 
+            // Evidenzia il giorno corrente usando la data locale del browser.
+            const now = new Date();
+            const isToday =
+              year === now.getFullYear() &&
+              month === now.getMonth() &&
+              day === now.getDate();
+
             return (
               <div
                 key={`${year}-${month}-${day}`}
@@ -313,7 +320,8 @@ onClick={() => {
                 : hasSlot
                 ? "available-day"
                 : ""
-                }`}
+                } ${isToday ? "today" : ""}`}
+                aria-current={isToday ? "date" : undefined}
               >
                 <div
   style={{
@@ -322,7 +330,23 @@ onClick={() => {
     width: "100%",
   }}
 >
-  <span>{day}</span>
+  <span
+    style={isToday ? {
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      width: 30,
+      height: 30,
+      borderRadius: "50%",
+      boxSizing: "border-box",
+      background: selected ? "#0754b8" : "#dbeafe",
+      color: selected ? "#ffffff" : "#0754b8",
+      border: selected ? "2px solid #ffffff" : "2px solid #1687ed",
+      fontWeight: 900,
+    } : undefined}
+  >
+    {day}
+  </span>
 
   {dayEvents.length > 0 && (
     <div
